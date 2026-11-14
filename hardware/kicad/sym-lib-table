@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "trs80_fpga_card") (type "KiCad") (uri "${KIPRJMOD}/trs80_fpga_card.kicad_sym") (options "") (descr "TRS-80 FPGA card parts"))
+)

@@ -1,0 +1,48 @@
+Name     ECB_XMEM_MEM ;
+PartNo   U4 ;
+Date     2026-11-13 ;
+Revision 2.0 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly ECB banked-memory card (X-MEM/80 compatible) ;
+Location U4 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * Memory select for the 512K SRAM in 8000h-FFFFh, and SRAM A14.
+ *
+ * SRAM address (page register bits Q4..Q0 as written by the Z80):
+ *   A13-A0   CPU A13-A0
+ *   A18-A15  U7 74HCT157: LO Q3..Q0 when CPU A14 = 0, HI Q3..Q0 when 1
+ *   A14      X-MEM mode:    LO Q4 / HI Q4 (selected by CPU A14)
+ *            SuperMem mode: CPU A14 (32K pages; both registers hold the page)
+ * So X-MEM page n is 16K block {n3..n0, n4} and SuperMem page p is the
+ * 32K block {p3..p0} - every page distinct, as on the original.
+ *
+ * EXTMEM* (ECB c10) is held low while the card is enabled: the backplane
+ * then keeps the Expansion Interface's own RAM off 8000h-FFFFh.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A15 ;
+PIN 2  = A14 ;
+PIN 3  = !MREQ ;    /* ECB MREQ* */
+PIN 4  = !RD ;      /* ECB RD*   */
+PIN 5  = !WR ;      /* ECB WR*   */
+PIN 6  = !SM ;      /* SM_N:  JP1 fitted = SuperMem (32K) mode */
+PIN 7  = !EN ;      /* EN_N:  JP2 fitted = card enabled */
+PIN 8  = LO4 ;      /* U5 Q4 */
+PIN 9  = HI4 ;      /* U6 Q4 */
+
+PIN 12 = EXTMEM_N ; /* ECB c10, open-drain emulation */
+PIN 13 = !RAM_CE ;  /* SRAM CE# */
+PIN 14 = !BUF_OE ;  /* U2 74HCT245 /OE */
+PIN 15 = SA14 ;     /* SRAM A14 */
+
+RAMSEL = A15 & MREQ & (RD # WR) & EN ;
+RAM_CE = RAMSEL ;
+BUF_OE = RAMSEL ;
+
+SA14 = (SM & A14) # (!SM & A14 & HI4) # (!SM & !A14 & LO4) ;
+
+EXTMEM_N    = 'b'0 ;
+EXTMEM_N.oe = EN ;

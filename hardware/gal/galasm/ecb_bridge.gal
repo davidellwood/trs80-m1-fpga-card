@@ -1,0 +1,18 @@
+GAL16V8
+BRIDGE21
+; Backplane U3 (ATF16V8B), rev 2.1: Model I strobes -> ECB MREQ*/IORQ*/RD*/WR*/M1*/RESET*,
+; plus EI RD*/WR* withheld for 8000-FFFF while EXTMEM* (ECB c10) is low.
+MRD_N MWR_N IN_N OUT_N INTAK_N SYSRES_N A15 EXTMEM_N NC GND
+NC MREQ_N IORQ_N RD_N WR_N M1_N RESET_N EI_RD_N EI_WR_N VCC
+
+/MREQ_N  = /MRD_N + /MWR_N
+/IORQ_N  = /IN_N + /OUT_N + /INTAK_N
+/RD_N    = /MRD_N + /IN_N
+/WR_N    = /MWR_N + /OUT_N
+/M1_N    = /INTAK_N
+/RESET_N = /SYSRES_N
+/EI_RD_N = /MRD_N*/A15 + /MRD_N*EXTMEM_N
+/EI_WR_N = /MWR_N*/A15 + /MWR_N*EXTMEM_N
+
+DESCRIPTION
+ECB bridge for the TRS-80 Model I backplane. Source of truth: ecb_bridge.pld.

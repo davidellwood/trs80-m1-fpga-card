@@ -1,0 +1,14 @@
+GAL16V8
+IODEC01
+; Rev 0.1 card U5 (ATF16V8B): port block 50-53 (70-73 with ALT), Model I bus.
+A7 A6 A5 A4 A3 A2 A1 IN_N OUT_N GND
+ALT_N IORD IOWR DP_CE_N MEMQ ACT_N NC NC NC VCC
+
+IORD = /A7*A6*/A5*A4*/A3*/A2*ALT_N*/IN_N + /A7*A6*A5*A4*/A3*/A2*/ALT_N*/IN_N
+IOWR = /A7*A6*/A5*A4*/A3*/A2*ALT_N*/OUT_N + /A7*A6*A5*A4*/A3*/A2*/ALT_N*/OUT_N
+MEMQ = IN_N*OUT_N
+/ACT_N = /DP_CE_N + /A7*A6*/A5*A4*/A3*/A2*ALT_N*/IN_N + /A7*A6*A5*A4*/A3*/A2*/ALT_N*/IN_N
+       + /A7*A6*/A5*A4*/A3*/A2*ALT_N*/OUT_N + /A7*A6*A5*A4*/A3*/A2*/ALT_N*/OUT_N
+
+DESCRIPTION
+I/O decoder for the rev 0.1 card. Source of truth: io_decode.pld.

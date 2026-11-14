@@ -1,0 +1,14 @@
+GAL16V8
+ECBSD21
+; SD card U2 (ATF16V8B): ports C0-CF, Pico handshake, WAIT* as emulated open drain.
+A7 A6 A5 A4 IORQ_N RD_N WR_N M1_N ACK GND
+EN_N WAIT_N SELRD SELWR BUF_OE_N NC NC NC NC VCC
+
+SELRD = A7*A6*/A5*/A4*/IORQ_N*M1_N*/EN_N*/RD_N
+SELWR = A7*A6*/A5*/A4*/IORQ_N*M1_N*/EN_N*/WR_N
+/BUF_OE_N = A7*A6*/A5*/A4*/IORQ_N*M1_N*/EN_N*/RD_N + A7*A6*/A5*/A4*/IORQ_N*M1_N*/EN_N*/WR_N
+WAIT_N.T = GND
+WAIT_N.E = A7*A6*/A5*/A4*/IORQ_N*M1_N*/EN_N*/ACK
+
+DESCRIPTION
+ECB SD card decoder. Source of truth: ecb_sd_decode.pld (rev 2.1).

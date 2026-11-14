@@ -1,0 +1,11 @@
+GAL22V10
+ECBMEM20
+; FPGA card U4 (ATF22V10C): IDT7132 window 3000-37DF (37FF with FULL), ECB signals.
+A15 A14 A13 A12 A11 A10 A9 A8 A7 A6 A5 GND
+FULL_N MREQ_N RD_N WR_N NC NC NC NC NC NC DP_CE_N VCC
+
+; complement form: low = WIN & (!EITOP + FULL) & MREQ & (RD + WR)
+DP_CE_N = A15 + A14 + /A13 + /A12 + A11 + A10*A9*A8*A7*A6*A5*FULL_N + MREQ_N + RD_N*WR_N
+
+DESCRIPTION
+ECB FPGA card memory decoder. Source of truth: ecb_mem_decode.pld.

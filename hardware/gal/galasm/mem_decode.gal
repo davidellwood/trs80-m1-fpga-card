@@ -1,0 +1,13 @@
+GAL22V10
+MEMDEC01
+; Rev 0.1 card U4 (ATF22V10C): IDT7132 window 3000-37DF (37FF with FULL), Model I bus.
+; GALasm version of mem_decode.pld. Pins are declared at their electrical level.
+A15 A14 A13 A12 A11 A10 A9 A8 A7 A6 A5 GND
+A4 A3 A2 A1 A0 RD_N WR_N FULL_N MEMQ NC DP_CE_N VCC
+
+; DP_CE_N low = WIN & (!EITOP + FULL) & MEMQ & (RD + WR); written as its complement
+; so it fits the 8 product terms of pin 23.
+DP_CE_N = A15 + A14 + /A13 + /A12 + A11 + A10*A9*A8*A7*A6*A5*FULL_N + /MEMQ + RD_N*WR_N
+
+DESCRIPTION
+Memory decoder for the rev 0.1 TRS-80 Model I FPGA card. Source of truth: mem_decode.pld.

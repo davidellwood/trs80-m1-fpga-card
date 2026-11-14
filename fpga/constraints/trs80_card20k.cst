@@ -1,0 +1,82 @@
+// Tang Nano 20K (GW2AR-LV18QN88C8/I7) pin constraints for the rev 2 ECB FPGA card.
+// Numbers are GW2AR-18 QN88 package pins; header positions are in
+// hardware/tools/gen_card_fpga.py (TANG_L / TANG_R) and docs/rev2-architecture.md.
+// All header banks are 3.3 V.
+
+// ---- on-board ----
+IO_LOC  "clk27" 4;
+IO_PORT "clk27" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+IO_LOC  "pa_en" 51;
+IO_PORT "pa_en" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_LOC  "ws2812" 79;
+IO_PORT "ws2812" IO_TYPE=LVCMOS33 DRIVE=8;
+
+// ---- IDT7132 right-port address (left header) ----
+IO_LOC "ra[0]" 73;
+IO_LOC "ra[1]" 74;
+IO_LOC "ra[2]" 85;
+IO_LOC "ra[3]" 77;
+IO_LOC "ra[4]" 27;
+IO_LOC "ra[5]" 28;
+IO_LOC "ra[6]" 25;
+IO_LOC "ra[7]" 26;
+IO_LOC "ra[8]" 29;
+IO_LOC "ra[9]" 30;
+IO_LOC "ra[10]" 31;
+IO_PORT "ra[0]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[1]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[2]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[3]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[4]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[5]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[6]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[7]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[8]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[9]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[10]" IO_TYPE=LVCMOS33 DRIVE=8;
+
+// ---- DPRAM / port control (left header, on the module LED pins) ----
+IO_LOC  "r_ce_n" 15;        // LED0
+IO_LOC  "r_rw_n" 16;        // LED1
+IO_LOC  "port_oe_n" 17;     // LED2
+IO_PORT "r_ce_n" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "r_rw_n" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "port_oe_n" IO_TYPE=LVCMOS33 DRIVE=8;
+
+// ---- inputs from U6 (CD74HC4050, push-pull) ----
+IO_LOC  "iord" 18;          // LED3
+IO_LOC  "r_busy_n" 19;      // LED4
+IO_LOC  "reset_n" 20;       // LED5
+IO_LOC  "iowr" 71;
+IO_LOC  "pa[0]" 53;
+IO_LOC  "pa[1]" 52;
+IO_PORT "iord" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "r_busy_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "reset_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "iowr" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pa[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pa[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+// ---- shared data bus FD0-FD7 (right header; 4.7k pull-ups on the card) ----
+IO_LOC "fd[0]" 80;
+IO_LOC "fd[1]" 42;
+IO_LOC "fd[2]" 41;
+IO_LOC "fd[3]" 56;
+IO_LOC "fd[4]" 54;
+IO_LOC "fd[5]" 48;
+IO_LOC "fd[6]" 55;
+IO_LOC "fd[7]" 49;
+IO_PORT "fd[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[6]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[7]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+
+// ---- open-drain gate drivers (10k pull-downs on the card) ----
+IO_LOC  "wait_drv" 86;
+IO_LOC  "int_drv" 72;
+IO_PORT "wait_drv" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "int_drv" IO_TYPE=LVCMOS33 DRIVE=8;

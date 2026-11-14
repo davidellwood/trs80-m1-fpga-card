@@ -1,0 +1,45 @@
+Name     ECB_MEM_DECODE ;
+PartNo   U4 ;
+Date     2026-11-13 ;
+Revision 2.0 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly ECB FPGA card (Tang Nano 20K) ;
+Location U4 ;
+Device   g22v10 ;
+
+/* ------------------------------------------------------------------
+ * Memory decoder for the IDT7132 left (Z80) port on the ECB card.
+ * Uses the Z80-style ECB strobes rebuilt by the backplane bridge GAL.
+ *
+ *   0x3000-0x37DF  DPRAM window (default, Expansion Interface present)
+ *   0x3000-0x37FF  DPRAM window with the FULL jumper (JP3) -> no EI!
+ *
+ * MREQ* qualifies the cycle (replaces rev 0.1's MEMQ from the I/O GAL).
+ * Requiring RD* or WR* also skips Z80 refresh cycles, so the card works
+ * in a real Z80 ECB system as well as behind the Model I bridge.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A15 ;
+PIN 2  = A14 ;
+PIN 3  = A13 ;
+PIN 4  = A12 ;
+PIN 5  = A11 ;
+PIN 6  = A10 ;
+PIN 7  = A9 ;
+PIN 8  = A8 ;
+PIN 9  = A7 ;
+PIN 10 = A6 ;
+PIN 11 = A5 ;
+PIN 13 = !FULL ;    /* FULL_N: JP3 fitted = full 2K window */
+PIN 14 = !MREQ ;    /* ECB MREQ* */
+PIN 15 = !RD ;      /* ECB RD*   */
+PIN 16 = !WR ;      /* ECB WR*   */
+
+PIN 23 = !DP_CE ;   /* DP_CE_N: IDT7132 CE_L and U2 /OE */
+/* pins 17-22 spare */
+
+WIN    = !A15 & !A14 & A13 & A12 & !A11 ;          /* 0x3000-0x37FF */
+EITOP  = A10 & A9 & A8 & A7 & A6 & A5 ;            /* 0x37E0-0x37FF */
+SEL    = WIN & (!EITOP # FULL) ;
+DP_CE  = SEL & MREQ & (RD # WR) ;

@@ -1,0 +1,25 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | MRD_N    | Input
+   2   | MWR_N    | Input
+   3   | IN_N     | Input
+   4   | OUT_N    | Input
+   5   | INTAK_N  | Input
+   6   | SYSRES_N | Input
+   7   | A15      | Input
+   8   | EXTMEM_N | Input
+   9   | NC       | Input
+  10   | GND      | GND
+  11   | NC       | Input
+  12   | MREQ_N   | Output
+  13   | IORQ_N   | Output
+  14   | RD_N     | Output
+  15   | WR_N     | Output
+  16   | M1_N     | Output
+  17   | RESET_N  | Output
+  18   | EI_RD_N  | Output
+  19   | EI_WR_N  | Output
+  20   | VCC      | VCC
+

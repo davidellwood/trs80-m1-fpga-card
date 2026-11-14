@@ -1,0 +1,25 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | A7       | Input
+   2   | A6       | Input
+   3   | A5       | Input
+   4   | A4       | Input
+   5   | A3       | Input
+   6   | A2       | Input
+   7   | A1       | Input
+   8   | A0       | Input
+   9   | IORQ_N   | Input
+  10   | GND      | GND
+  11   | WR_N     | Input
+  12   | CLK_LO   | Output
+  13   | RD_N     | Input
+  14   | M1_N     | Input
+  15   | CLK_HI   | Output
+  16   | RB_OE_N  | Output
+  17   | EN_N     | Input
+  18   | NC       | NC
+  19   | NC       | NC
+  20   | VCC      | VCC
+

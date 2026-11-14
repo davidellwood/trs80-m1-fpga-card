@@ -1,0 +1,53 @@
+Name     ECB_SD_DECODE ;
+PartNo   U2 ;
+Date     2026-11-13 ;
+Revision 2.1 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly ECB SD card (Raspberry Pi Pico, FreHD-compatible) ;
+Location U2 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * Port decode + bus handshake for the FreHD-compatible SD card.
+ * Ports C0h-CFh (16 registers; A3:A0 go to the Pico via U3).
+ *
+ * Handshake (the Pico services every access in firmware):
+ *   1. IN/OUT to C0-CF -> SELRD or SELWR high, WAIT* pulled low at once.
+ *   2. Pico reads the address (and data for OUT), or drives the data for
+ *      IN, then raises ACK.
+ *   3. ACK high releases WAIT*; the Z80 finishes the cycle; SEL drops.
+ *   4. Pico releases the data lines and lowers ACK.
+ * WAIT* is emulated open-drain: driven low only while enabled, else
+ * tri-stated (ECB WAIT* is wired-OR with a pull-up on the backplane).
+ * ACK has a pull-up on the card, so with no Pico running the card never
+ * holds WAIT (reads then return FFh).
+ * EN_N (JP1 fitted = low) enables the card.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A7 ;
+PIN 2  = A6 ;
+PIN 3  = A5 ;
+PIN 4  = A4 ;
+PIN 5  = !IORQ ;    /* ECB IORQ* */
+PIN 6  = !RD ;      /* ECB RD*   */
+PIN 7  = !WR ;      /* ECB WR*   */
+PIN 8  = !M1 ;      /* ECB M1*   */
+PIN 9  = ACK ;      /* from the Pico (3.3 V into TTL-level input) */
+PIN 11 = !EN ;      /* EN_N: JP1 fitted */
+
+PIN 12 = WAIT_N ;   /* to ECB WAIT*, open-drain emulation */
+PIN 13 = SELRD ;    /* active high, to the Pico via U3 */
+PIN 14 = SELWR ;    /* active high, to the Pico via U3 */
+PIN 15 = !BUF_OE ;  /* BUF_OE_N: U1 74HCT245 /OE */
+
+SEL    = A7 & A6 & !A5 & !A4 & IORQ & !M1 & EN ;   /* C0h-CFh, not INTA */
+
+SELRD  = SEL & RD ;
+SELWR  = SEL & WR ;
+BUF_OE = SEL & (RD # WR) ;
+
+WAIT_N    = 'b'0 ;
+WAIT_N.oe = SEL & !ACK ;      /* one product term: a 16V8 OE row can't hold an OR.  */
+                              /* RD*|WR* isn't needed: with M1* high, IORQ* only   */
+                              /* asserts together with RD* or WR* (bridge and Z80) */

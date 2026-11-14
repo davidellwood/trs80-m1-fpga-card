@@ -1,0 +1,54 @@
+Name     MEM_DECODE ;
+PartNo   U4 ;
+Date     2026-11-12 ;
+Revision 0.2 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly TRS-80 Model I FPGA card ;
+Location U4 ;
+Device   g22v10 ;
+
+/* ------------------------------------------------------------------
+ * Memory-side decoder for the IDT7132 dual-port RAM (left/Z80 port).
+ * Target: ATF22V10C (WinCUPL device g22v10), programmed with a TL866/T48.
+ *
+ *   0x3000-0x37DF  DPRAM window (default, Expansion Interface present)
+ *   0x3000-0x37FF  DPRAM window when FULL jumper (JP3) is fitted -> no EI!
+ *
+ * MEMQ comes from U5 and is high when the bus cycle is NOT an I/O cycle.
+ * It guards against RD*/WR* being asserted during IN/OUT when the high
+ * address byte happens to fall in 0x30-0x37 (Model I bus qualification
+ * to be confirmed on real hardware; harmless if RD*/WR* are already
+ * memory-only).
+ * ------------------------------------------------------------------ */
+
+/* Inputs */
+PIN 1  = A15 ;
+PIN 2  = A14 ;
+PIN 3  = A13 ;
+PIN 4  = A12 ;
+PIN 5  = A11 ;
+PIN 6  = A10 ;
+PIN 7  = A9 ;
+PIN 8  = A8 ;
+PIN 9  = A7 ;
+PIN 10 = A6 ;
+PIN 11 = A5 ;
+PIN 13 = A4 ;
+PIN 14 = A3 ;
+PIN 15 = A2 ;
+PIN 16 = A1 ;
+PIN 17 = A0 ;
+PIN 18 = !RD ;      /* RD_N  : memory read strobe from the bus  */
+PIN 19 = !WR ;      /* WR_N  : memory write strobe from the bus */
+PIN 20 = !FULL ;    /* FULL_N: JP3 fitted = full 2K window      */
+PIN 21 = MEMQ ;     /* from U5: high = not an I/O cycle         */
+
+/* Outputs (pin 22 is spare: the FPGA is now commanded through I/O ports) */
+PIN 23 = !DP_CE ;   /* DP_CE_N: IDT7132 CE_L and U2 /OE */
+
+WIN    = !A15 & !A14 & A13 & A12 & !A11 ;          /* 0x3000-0x37FF */
+EITOP  = A10 & A9 & A8 & A7 & A6 & A5 ;            /* 0x37E0-0x37FF within WIN */
+SEL    = WIN & (!EITOP # FULL) ;
+
+DP_CE  = SEL & MEMQ & (RD # WR) ;

@@ -1,0 +1,48 @@
+Name     ECB_XMEM_IO ;
+PartNo   U3 ;
+Date     2026-11-13 ;
+Revision 2.1 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly ECB banked-memory card (X-MEM/80 compatible) ;
+Location U3 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * Page-register ports, X-MEM/80 / SuperMem compatible:
+ *   OUT 41h  page for 8000-BFFF (X-MEM mode)        -> U5 (LO register)
+ *   OUT 42h  page for C000-FFFF (X-MEM mode)        -> U6 (HI register)
+ *   OUT 43h  32K page for 8000-FFFF (SuperMem mode) -> both registers
+ *   IN  43h  read back the LO register (bits 7-5 read 0), only while the card
+ *            is enabled (JP2), so a disabled card never drives the bus
+ * CLK_LO / CLK_HI are active high: the 74HCT273s latch on the rising
+ * edge, i.e. when WR* goes low, with the OUT data already valid.
+ * M1* high excludes interrupt acknowledge.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A7 ;
+PIN 2  = A6 ;
+PIN 3  = A5 ;
+PIN 4  = A4 ;
+PIN 5  = A3 ;
+PIN 6  = A2 ;
+PIN 7  = A1 ;
+PIN 8  = A0 ;
+PIN 9  = !IORQ ;    /* ECB IORQ* */
+PIN 11 = !WR ;      /* ECB WR*   */
+PIN 13 = !RD ;      /* ECB RD*  (I/O pin used as input) */
+PIN 14 = !M1 ;      /* ECB M1*  (I/O pin used as input) */
+PIN 17 = !EN ;      /* EN_N: JP2 fitted = card enabled (I/O pin used as input) */
+
+PIN 12 = CLK_LO ;   /* U5 CP */
+PIN 15 = CLK_HI ;   /* U6 CP */
+PIN 16 = !RB_OE ;   /* U8 74HCT244 /OE (readback) */
+
+SEL = !A7 & A6 & !A5 & !A4 & !A3 & !A2 & IORQ & !M1 ;   /* 40h-43h */
+P41 = SEL & !A1 &  A0 ;
+P42 = SEL &  A1 & !A0 ;
+P43 = SEL &  A1 &  A0 ;
+
+CLK_LO = (P41 # P43) & WR ;
+CLK_HI = (P42 # P43) & WR ;
+RB_OE  = P43 & RD & EN ;

@@ -1,0 +1,61 @@
+Name     ECB_BRIDGE ;
+PartNo   U3 ;
+Date     2026-11-13 ;
+Revision 2.1 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly TRS-80 Model I ECB backplane ;
+Location U3 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * Rebuilds the Z80-style ECB control signals from the Model I bus.
+ * The Model I gives qualified strobes only: RD*/WR* (memory),
+ * IN*/OUT* (I/O) and INTAK* (interrupt acknowledge); there is no
+ * MREQ*, IORQ* or M1*. All signals are active low.
+ *
+ *   ECB MREQ* = memory cycle   (RD* or WR* low)
+ *   ECB IORQ* = I/O cycle      (IN* or OUT* or INTAK* low)
+ *   ECB RD*   = any read       (RD* or IN* low)
+ *   ECB WR*   = any write      (WR* or OUT* low)
+ *   ECB M1*   = INTAK*         (so M1* + IORQ* = interrupt acknowledge)
+ *   ECB RESET*= SYSRES*
+ *
+ * Rev 2.1: memory RD*/WR* to the Expansion Interface (J2 pins 16/14) go
+ * through here too. While a banked-memory card (X-MEM) pulls ECB c10
+ * (EXTMEM*) low, accesses to 8000h-FFFFh are withheld from the EI, so
+ * its own DRAM there stays off the bus (as the original X-MEM/80 does in
+ * its pass-through).
+ *
+ * Target ATF16V8B (WinCUPL g16v8a); propagation ~15 ns (-10 part: ~10 ns,
+ * preferred for the EI RD*/WR* path).
+ * ------------------------------------------------------------------ */
+
+PIN 1  = !MRD ;     /* Model I RD*    */
+PIN 2  = !MWR ;     /* Model I WR*    */
+PIN 3  = !IN ;      /* Model I IN*    */
+PIN 4  = !OUT ;     /* Model I OUT*   */
+PIN 5  = !INTAK ;   /* Model I INTAK* */
+PIN 6  = !SYSRES ;  /* Model I SYSRES* */
+PIN 7  = A15 ;      /* Model I A15    */
+PIN 8  = !EXTMEM ;  /* ECB c10, pulled up on the backplane */
+
+PIN 12 = !MREQ ;    /* ECB MREQ* */
+PIN 13 = !IORQ ;    /* ECB IORQ* */
+PIN 14 = !RD ;      /* ECB RD*   */
+PIN 15 = !WR ;      /* ECB WR*   */
+PIN 16 = !M1 ;      /* ECB M1*   */
+PIN 17 = !RESET ;   /* ECB RESET* */
+PIN 18 = !EI_RD ;   /* to the EI (J2 pin 16) */
+PIN 19 = !EI_WR ;   /* to the EI (J2 pin 14) */
+
+MREQ  = MRD # MWR ;
+IORQ  = IN # OUT # INTAK ;
+RD    = MRD # IN ;
+WR    = MWR # OUT ;
+M1    = INTAK ;
+RESET = SYSRES ;
+
+CLAIM = A15 & EXTMEM ;
+EI_RD = MRD & !CLAIM ;
+EI_WR = MWR & !CLAIM ;

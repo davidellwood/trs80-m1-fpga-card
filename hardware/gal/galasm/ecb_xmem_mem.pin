@@ -1,0 +1,25 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | A15      | Input
+   2   | A14      | Input
+   3   | MREQ_N   | Input
+   4   | RD_N     | Input
+   5   | WR_N     | Input
+   6   | SM_N     | Input
+   7   | EN_N     | Input
+   8   | LO4      | Input
+   9   | HI4      | Input
+  10   | GND      | GND
+  11   | NC       | Input
+  12   | EXTMEM_N | Output
+  13   | RAM_CE_N | Output
+  14   | BUF_OE_N | Output
+  15   | SA14     | Output
+  16   | NC       | NC
+  17   | NC       | NC
+  18   | NC       | NC
+  19   | NC       | NC
+  20   | VCC      | VCC
+

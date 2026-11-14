@@ -1,0 +1,51 @@
+Name     IO_DECODE ;
+PartNo   U5 ;
+Date     2026-11-12 ;
+Revision 0.2 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly TRS-80 Model I FPGA card ;
+Location U5 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * I/O-side decoder: a block of 4 Z80 ports handled by the FPGA.
+ * Target: ATF16V8B (WinCUPL device g16v8a), programmed with a TL866/T48.
+ *
+ *   default 0x50-0x53, JP4 fitted 0x70-0x73
+ *     +0  Am9511 data
+ *     +1  Am9511 command (OUT) / status (IN)
+ *     +2  sprite engine parameter (OUT) / result (IN)
+ *     +3  sprite engine command (OUT) / status (IN)
+ *
+ * A1:A0 are not decoded here; they go to the FPGA via U6 (PA1/PA0)
+ * and select the register inside the block.
+ * ------------------------------------------------------------------ */
+
+/* Inputs */
+PIN 1  = A7 ;
+PIN 2  = A6 ;
+PIN 3  = A5 ;
+PIN 4  = A4 ;
+PIN 5  = A3 ;
+PIN 6  = A2 ;
+PIN 7  = A1 ;       /* not used in the equations (block of 4) */
+PIN 8  = !IN ;      /* IN_N  : port read strobe  */
+PIN 9  = !OUT ;     /* OUT_N : port write strobe */
+PIN 11 = !ALT ;     /* PORT_ALT_N: JP4 fitted    */
+PIN 14 = !DP_CE ;   /* DP_CE_N from U4 (activity LED only) */
+
+/* Outputs */
+PIN 12 = IORD ;     /* active high, to FPGA via U6 */
+PIN 13 = IOWR ;     /* active high, to FPGA via U6 */
+PIN 15 = MEMQ ;     /* high when NOT an I/O cycle, to U4 */
+PIN 16 = !ACT ;     /* ACT_LED_N: sinks the activity LED */
+
+STD  = !A7 & A6 & !A5 & A4 & !A3 & !A2 ;           /* 0x50-0x53 */
+ALTP = !A7 & A6 &  A5 & A4 & !A3 & !A2 ;           /* 0x70-0x73 */
+PORT = (STD & !ALT) # (ALTP & ALT) ;
+
+IORD = PORT & IN ;
+IOWR = PORT & OUT ;
+MEMQ = !IN & !OUT ;
+ACT  = DP_CE # (PORT & IN) # (PORT & OUT) ;     /* no feedback from pin 12 in complex mode */

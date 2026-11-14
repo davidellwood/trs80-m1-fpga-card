@@ -1,0 +1,48 @@
+Name     ECB_IO_DECODE ;
+PartNo   U5 ;
+Date     2026-11-13 ;
+Revision 2.0 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly ECB FPGA card (Tang Nano 20K) ;
+Location U5 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * I/O decoder on the ECB card: a block of 4 Z80 ports for the FPGA.
+ *
+ *   default 0x50-0x53, JP4 fitted 0x70-0x73
+ *     +0  Am9511 data
+ *     +1  Am9511 command (OUT) / status (IN)
+ *     +2  sprite engine parameter (OUT) / result (IN)
+ *     +3  sprite engine command (OUT) / status (IN)
+ *
+ * IORQ* with M1* high = a real I/O cycle (IORQ* + M1* = interrupt
+ * acknowledge, which must not hit the port block). A1:A0 go to the FPGA
+ * through U6 and select the register.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A7 ;
+PIN 2  = A6 ;
+PIN 3  = A5 ;
+PIN 4  = A4 ;
+PIN 5  = A3 ;
+PIN 6  = A2 ;
+PIN 7  = !IORQ ;    /* ECB IORQ* */
+PIN 8  = !RD ;      /* ECB RD*   */
+PIN 9  = !WR ;      /* ECB WR*   */
+PIN 11 = !ALT ;     /* PORT_ALT_N: JP4 fitted */
+PIN 14 = !M1 ;      /* ECB M1* (used as an input) */
+PIN 15 = !DP_CE ;   /* DP_CE_N from U4 (activity LED only) */
+
+PIN 12 = IORD ;     /* active high, to the FPGA via U6 */
+PIN 13 = IOWR ;     /* active high, to the FPGA via U6 */
+PIN 16 = !ACT ;     /* ACT_LED_N: sinks the activity LED */
+
+STD  = !A7 & A6 & !A5 & A4 & !A3 & !A2 ;           /* 0x50-0x53 */
+ALTP = !A7 & A6 &  A5 & A4 & !A3 & !A2 ;           /* 0x70-0x73 */
+PORT = ((STD & !ALT) # (ALTP & ALT)) & IORQ & !M1 ;
+
+IORD = PORT & RD ;
+IOWR = PORT & WR ;
+ACT  = DP_CE # (PORT & RD) # (PORT & WR) ;

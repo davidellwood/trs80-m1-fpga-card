@@ -1,0 +1,13 @@
+GAL16V8
+XMEMIO21
+; Banked-memory card U3 (ATF16V8B): OUT 41h/42h/43h page-register clocks, IN 43h readback.
+A7 A6 A5 A4 A3 A2 A1 A0 IORQ_N GND
+WR_N CLK_LO RD_N M1_N CLK_HI RB_OE_N EN_N NC NC VCC
+
+; CLK_LO = (P41 + P43) & WR = SEL & A0 & WR;  CLK_HI = (P42 + P43) & WR = SEL & A1 & WR
+CLK_LO = /A7*A6*/A5*/A4*/A3*/A2*/IORQ_N*M1_N*A0*/WR_N
+CLK_HI = /A7*A6*/A5*/A4*/A3*/A2*/IORQ_N*M1_N*A1*/WR_N
+/RB_OE_N = /A7*A6*/A5*/A4*/A3*/A2*/IORQ_N*M1_N*A1*A0*/RD_N*/EN_N
+
+DESCRIPTION
+ECB banked-memory card port decoder. Source of truth: ecb_xmem_io.pld (rev 2.1).

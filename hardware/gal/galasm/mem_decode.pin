@@ -1,0 +1,29 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | A15      | Clock/Input
+   2   | A14      | Input
+   3   | A13      | Input
+   4   | A12      | Input
+   5   | A11      | Input
+   6   | A10      | Input
+   7   | A9       | Input
+   8   | A8       | Input
+   9   | A7       | Input
+  10   | A6       | Input
+  11   | A5       | Input
+  12   | GND      | GND
+  13   | A4       | Input
+  14   | A3       | NC
+  15   | A2       | NC
+  16   | A1       | NC
+  17   | A0       | NC
+  18   | RD_N     | Input
+  19   | WR_N     | Input
+  20   | FULL_N   | Input
+  21   | MEMQ     | Input
+  22   | NC       | NC
+  23   | DP_CE_N  | Output
+  24   | VCC      | VCC
+

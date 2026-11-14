@@ -1,0 +1,24 @@
+# build outputs (regenerate with the build scripts)
+fpga/impl/
+firmware/sdcard/build/
+software/build/
+*.vvp
+*.vcd
+
+# Python
+__pycache__/
+*.pyc
+
+# KiCad local/state files
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.lck
+\#auto_saved_files#
+_autosave-*
+
+# editor / OS
+.vscode/
+*.swp
+Thumbs.db
+desktop.ini

@@ -1,0 +1,14 @@
+GAL16V8
+XMEMMEM2
+; Banked-memory card U4 (ATF16V8B): SRAM select in 8000-FFFF, SRAM A14, EXTMEM* (ECB c10).
+A15 A14 MREQ_N RD_N WR_N SM_N EN_N LO4 HI4 GND
+NC EXTMEM_N RAM_CE_N BUF_OE_N SA14 NC NC NC NC VCC
+
+/RAM_CE_N = A15*/MREQ_N*/EN_N*/RD_N + A15*/MREQ_N*/EN_N*/WR_N
+/BUF_OE_N = A15*/MREQ_N*/EN_N*/RD_N + A15*/MREQ_N*/EN_N*/WR_N
+SA14 = /SM_N*A14 + SM_N*A14*HI4 + SM_N*/A14*LO4
+EXTMEM_N.T = GND
+EXTMEM_N.E = /EN_N
+
+DESCRIPTION
+ECB banked-memory card memory decoder. Source of truth: ecb_xmem_mem.pld.

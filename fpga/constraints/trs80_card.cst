@@ -1,0 +1,88 @@
+// Tang Nano 9K (GW1NR-LV9QN88PC6/I5) pin constraints for the TRS-80 Model I FPGA card.
+// Pin numbers are GW1NR-9 package pins = "Pxx" in the schematic / docs/hardware-design.md.
+
+// ---- on-board ----
+IO_LOC  "clk27" 52;
+IO_PORT "clk27" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+IO_LOC  "btn_s1_n" 4;
+IO_PORT "btn_s1_n" IO_TYPE=LVCMOS18 PULL_MODE=UP;
+IO_LOC  "led_n[0]" 10;
+IO_LOC  "led_n[1]" 11;
+IO_LOC  "led_n[2]" 13;
+IO_LOC  "led_n[3]" 14;
+IO_LOC  "led_n[4]" 15;
+IO_LOC  "led_n[5]" 16;
+IO_PORT "led_n[0]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+IO_PORT "led_n[1]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+IO_PORT "led_n[2]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+IO_PORT "led_n[3]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+IO_PORT "led_n[4]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+IO_PORT "led_n[5]" IO_TYPE=LVCMOS18 PULL_MODE=UP DRIVE=8;
+
+// ---- IDT7132 right-port address (header 5-15) ----
+IO_LOC "ra[0]" 25;
+IO_LOC "ra[1]" 26;
+IO_LOC "ra[2]" 27;
+IO_LOC "ra[3]" 28;
+IO_LOC "ra[4]" 29;
+IO_LOC "ra[5]" 30;
+IO_LOC "ra[6]" 33;
+IO_LOC "ra[7]" 34;
+IO_LOC "ra[8]" 40;
+IO_LOC "ra[9]" 35;
+IO_LOC "ra[10]" 41;
+IO_PORT "ra[0]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[1]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[2]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[3]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[4]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[5]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[6]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[7]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[8]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[9]" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "ra[10]" IO_TYPE=LVCMOS33 DRIVE=8;
+
+// ---- shared data bus FD0-FD7 (2N7000 shifters, 4.7k pull-ups on board) ----
+IO_LOC "fd[0]" 42;
+IO_LOC "fd[1]" 51;
+IO_LOC "fd[2]" 53;
+IO_LOC "fd[3]" 54;
+IO_LOC "fd[4]" 55;
+IO_LOC "fd[5]" 56;
+IO_LOC "fd[6]" 57;
+IO_LOC "fd[7]" 32;
+IO_PORT "fd[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[2]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[3]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[4]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[5]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[6]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+IO_PORT "fd[7]" IO_TYPE=LVCMOS33 PULL_MODE=NONE DRIVE=8;
+
+// ---- inputs from U6 (CD74HC4050, push-pull) ----
+IO_LOC  "r_busy_n" 31;
+IO_LOC  "iord" 49;
+IO_LOC  "iowr" 48;
+IO_LOC  "pa[0]" 76;
+IO_LOC  "pa[1]" 77;
+IO_LOC  "sysres_n" 63;
+IO_PORT "r_busy_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "iord" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "iowr" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pa[0]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "pa[1]" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+IO_PORT "sysres_n" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+
+// ---- outputs (P70-P75: confirm 3.3 V bank on the Sipeed schematic) ----
+IO_LOC  "port_oe_n" 70;
+IO_LOC  "r_ce_n" 71;
+IO_LOC  "r_rw_n" 72;
+IO_LOC  "wait_drv" 74;
+IO_LOC  "int_drv" 75;
+IO_PORT "port_oe_n" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "r_ce_n" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "r_rw_n" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "wait_drv" IO_TYPE=LVCMOS33 DRIVE=8;
+IO_PORT "int_drv" IO_TYPE=LVCMOS33 DRIVE=8;

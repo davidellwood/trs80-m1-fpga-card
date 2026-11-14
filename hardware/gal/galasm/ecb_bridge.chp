@@ -1,0 +1,25 @@
+
+
+                                GAL16V8
+
+                          -------\___/-------
+                    MRD_N |  1           20 | VCC
+                          |                 |
+                    MWR_N |  2           19 | EI_WR_N
+                          |                 |
+                     IN_N |  3           18 | EI_RD_N
+                          |                 |
+                    OUT_N |  4           17 | RESET_N
+                          |                 |
+                  INTAK_N |  5           16 | M1_N
+                          |                 |
+                 SYSRES_N |  6           15 | WR_N
+                          |                 |
+                      A15 |  7           14 | RD_N
+                          |                 |
+                 EXTMEM_N |  8           13 | IORQ_N
+                          |                 |
+                       NC |  9           12 | MREQ_N
+                          |                 |
+                      GND | 10           11 | NC
+                          -------------------
