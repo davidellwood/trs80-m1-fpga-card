@@ -2,20 +2,23 @@
 
 All-through-hole hardware, FPGA design, firmware and Z80 software for the TRS-80 Model I.
 
-- **Rev 2 (current):** a backplane that turns the Model I expansion bus into a 5-slot ECB bus, with three Eurocard daughter cards. The design is in [docs/rev2-architecture.md](docs/rev2-architecture.md).
+- **Rev 2 (current):** three ECB Eurocard daughter cards, with two ways to connect them to the Model I. The design is in [docs/rev2-architecture.md](docs/rev2-architecture.md).
+  - The custom **backplane**: 5 slots, 4 layers, with an Expansion Interface pass-through.
+  - The **bridge card**: plugs into a standard ECB backplane. The Model I connects by ribbon to a right-angle header, and there's no EI.
 - **Rev 0.1:** the original single card on a Tang Nano 9K. It remains here as a working reference; see [docs/hardware-design.md](docs/hardware-design.md).
 
 ![Assembled rev 2 system](hardware/rev2_system_render.jpg)
 
-*Raytraced from the KiCad designs by `hardware/tools/render_system.py`. The Tang Nano 20K and the SD breakout are simplified stand-in models.*
+*Rev 2 system on the custom backplane, raytraced from the KiCad designs by `hardware/tools/render_system.py`. The Tang Nano 20K and the SD breakout are simplified stand-in models.*
 
-## Rev 2 boards
+## Boards
 
-All four are routed, and DRC is clean against their schematics. None has been built yet.
+All are routed, and DRC is clean against their schematics. None has been built yet.
 
 | Board | Folder | What it does |
 |---|---|---|
-| **Backplane** | `hardware/backplane/` | Model I → ECB bridge, 5 DIN 41612 C96 slots (RetroBrew ECB pinout), 4 layers. A GAL rebuilds MREQ*/IORQ*/RD*/WR*/M1* from the Model I strobes. It passes the bus through to the Expansion Interface; JP8/JP9 choose direct or GAL-gated EI RD*/WR* |
+| **Bridge card** | `hardware/card-bridge/` | Option 2, instead of the backplane: Model I → ECB bridge on a 100 × 160 Eurocard for a standard ECB backplane (e.g. RetroBrew). The Model I bus arrives on a right-angle 2 × 20 header. Buffered A0–A15, hysteresis receivers on the strobes and a claim-decoded data buffer for a longer cable, and a GAL rebuilding MREQ*/IORQ*/RD*/WR*/M1*/RESET*. No Expansion Interface |
+| **Backplane** | `hardware/backplane/` | Option 1: Model I → ECB bridge, 5 DIN 41612 C96 slots (RetroBrew ECB pinout), 4 layers. A GAL rebuilds MREQ*/IORQ*/RD*/WR*/M1* from the Model I strobes. It passes the bus through to the Expansion Interface; JP8/JP9 choose direct or GAL-gated EI RD*/WR* |
 | **FPGA card** | `hardware/card-fpga/` | Tang Nano 20K + IDT7132 2 KB dual-port RAM at 3000h. A hardware sprite engine on ports 52h/53h draws into a 1 KB frame buffer the Z80 copies to the screen with LDIR, and an Am9511 maths coprocessor sits on ports 50h/51h |
 | **SD card** | `hardware/card-sd/`, `firmware/sdcard/` | Raspberry Pi Pico running a FreHD-compatible hard disk on ports C0h–CFh: `.HDV` images, read-only DMK/JV3/JV1 floppy images, file transfer, and a DS1307 real-time clock |
 | **Banked memory** | `hardware/card-xmem/` | 512 KB SRAM paged into 8000h–FFFFh, software-compatible with X-MEM/80 (OUT 41h/42h, 16 KB pages) and SuperMem (OUT 43h, 32 KB pages) |
@@ -23,7 +26,7 @@ All four are routed, and DRC is clean against their schematics. None has been bu
 **System map**
 - **Memory:** 3000h–37DFh is the FPGA card's shared RAM; 8000h–FFFFh is banked RAM.
 - **I/O:** 41h–43h banked memory, 50h–53h FPGA card, C0h–CFh SD card.
-- **ECB line c10** is EXTMEM*, which the banked-memory card uses to have the backplane hide the EI's own RAM.
+- **ECB line c10** is EXTMEM*. The banked-memory card drives it so the backplane can hide an Expansion Interface's own RAM. The bridge card, which has no EI, just pulls it up.
 
 ## Repository layout
 

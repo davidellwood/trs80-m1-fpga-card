@@ -11,8 +11,8 @@ def hct245(p):
                 ("13", "B5", T), ("12", "B6", T), ("11", "B7", T)], half_w=7.62)
 
 
-def hct244(p):
-    p.ic("74HCT244", "U", "Octal buffer/line driver, 3-state, TTL inputs, DIP-20", "Package_DIP:DIP-20_W7.62mm",
+def hct244(p, name="74HCT244", desc="Octal buffer/line driver, 3-state, TTL inputs, DIP-20"):
+    p.ic(name, "U", desc, "Package_DIP:DIP-20_W7.62mm",
          left=[("2", "1A1", I), ("4", "1A2", I), ("6", "1A3", I), ("8", "1A4", I), ("11", "2A1", I),
                ("13", "2A2", I), ("15", "2A3", I), ("17", "2A4", I), None, ("1", "~{1OE}", I), ("19", "~{2OE}", I),
                None, ("20", "VCC", P), ("10", "GND", P)],

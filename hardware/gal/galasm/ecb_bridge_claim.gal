@@ -1,0 +1,26 @@
+GAL22V10
+CLAIM31
+; Bridge card U6 (ATF22V10C), rev 3.1: 74HCT245 data-buffer direction and enable.
+; CLAIM = memory read 3000-37DF or 8000-FFFF, or port read 40-43/50-53/70-73/C0-CF.
+A15 A14 A13 A12 A11 A10 A9 A8 A7 A6 A5 GND
+A4 A3 A2 MRD_N DIR BUF_OE_N IN_N NC NC NC NC VCC
+
+; DIR low (ECB -> Model I) only for a claimed read: 11 product terms (pin 17 has 14)
+/DIR = /MRD_N*A15
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A10 + /MRD_N*/A15*/A14*A13*A12*/A11*/A9
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A8  + /MRD_N*/A15*/A14*A13*A12*/A11*/A7
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A6  + /MRD_N*/A15*/A14*A13*A12*/A11*/A5
+     + /IN_N*/A7*A6*/A5*/A4*/A3*/A2 + /IN_N*/A7*A6*/A5*A4*/A3*/A2
+     + /IN_N*/A7*A6*A5*A4*/A3*/A2   + /IN_N*A7*A6*/A5*/A4
+
+; buffer enabled (low) except during an unclaimed read: 12 product terms (pin 18 has 16)
+/BUF_OE_N = MRD_N*IN_N
+     + /MRD_N*A15
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A10 + /MRD_N*/A15*/A14*A13*A12*/A11*/A9
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A8  + /MRD_N*/A15*/A14*A13*A12*/A11*/A7
+     + /MRD_N*/A15*/A14*A13*A12*/A11*/A6  + /MRD_N*/A15*/A14*A13*A12*/A11*/A5
+     + /IN_N*/A7*A6*/A5*/A4*/A3*/A2 + /IN_N*/A7*A6*/A5*A4*/A3*/A2
+     + /IN_N*/A7*A6*A5*A4*/A3*/A2   + /IN_N*A7*A6*/A5*/A4
+
+DESCRIPTION
+Bridge card data-buffer claim decoder. Source of truth: ecb_bridge_claim.pld.

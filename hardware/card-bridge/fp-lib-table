@@ -1,0 +1,4 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "trs80_card_bridge") (type "KiCad") (uri "${KIPRJMOD}/trs80_card_bridge.pretty") (options "") (descr ""))
+)

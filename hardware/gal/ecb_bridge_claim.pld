@@ -1,0 +1,65 @@
+Name     ECB_BRIDGE_CLAIM ;
+PartNo   U6 ;
+Date     2026-11-15 ;
+Revision 3.1 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly TRS-80 Model I -> ECB bridge card ;
+Location U6 ;
+Device   g22v10 ;
+
+/* ------------------------------------------------------------------
+ * Data-buffer control for the bridge card's 74HCT245 (U7).
+ * A side = Model I cable (through 33R), B side = ECB D0-D7.
+ *
+ * The buffer may only drive the Model I's data bus when an ECB card
+ * answers the read; otherwise it would fight the Model I's own ROM,
+ * RAM, keyboard and video. ECB has no "card responding" signal, so the
+ * bridge decodes the cards' address map (CLAIM):
+ *   memory reads  3000h-37DFh (FPGA card DPRAM; 37E0h-37FFh excluded so
+ *                 the Model I's boot-time reads there stay untouched)
+ *                 8000h-FFFFh (banked-memory card)
+ *   port reads    40h-43h (banked memory), 50h-53h and 70h-73h (FPGA card,
+ *                 both PORT ALT settings), C0h-CFh (SD card)
+ *
+ *   DIR (245 pin 1)  = low (B->A, ECB to Model I) only for a claimed read
+ *   BUF_OE (pin 19)  = enabled except during an unclaimed read
+ * So between reads the buffer passes Model I data to ECB (write data is
+ * there before WR* arrives), and an unclaimed read just disables it:
+ * DIR never reverses for a read nobody answers.
+ *
+ * Strobes come from the 74LS244 hysteresis receiver (U5); addresses
+ * from the ECB-side 74HCT244s. Add any new card's read ranges here.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = A15 ;
+PIN 2  = A14 ;
+PIN 3  = A13 ;
+PIN 4  = A12 ;
+PIN 5  = A11 ;
+PIN 6  = A10 ;
+PIN 7  = A9 ;
+PIN 8  = A8 ;
+PIN 9  = A7 ;
+PIN 10 = A6 ;
+PIN 11 = A5 ;
+PIN 13 = A4 ;
+PIN 14 = A3 ;
+PIN 15 = A2 ;
+PIN 16 = !MRD ;     /* Model I RD* (buffered) */
+PIN 19 = !IN ;      /* Model I IN* (buffered) */
+
+PIN 17 = DIR ;      /* U7 DIR: high = Model I -> ECB */
+PIN 18 = !BUF_OE ;  /* U7 /OE  */
+
+WIN    = !A15 & !A14 & A13 & A12 & !A11 ;                      /* 3000-37FF */
+EITOP  = A10 & A9 & A8 & A7 & A6 & A5 ;                        /* 37E0-37FF */
+MEMWIN = (WIN & !EITOP) # A15 ;
+PORTS  = (!A7 & A6 & !A5 & !A4 & !A3 & !A2)                    /* 40-43 */
+       # (!A7 & A6 & !A5 &  A4 & !A3 & !A2)                    /* 50-53 */
+       # (!A7 & A6 &  A5 &  A4 & !A3 & !A2)                    /* 70-73 */
+       # ( A7 & A6 & !A5 & !A4) ;                              /* C0-CF */
+CLAIM  = (MRD & MEMWIN) # (IN & PORTS) ;
+
+DIR    = !CLAIM ;
+BUF_OE = (!MRD & !IN) # CLAIM ;

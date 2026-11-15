@@ -164,6 +164,25 @@ def m_ecb_bridge(v):
             "EI_RD_N": int(not (mrd and not claim)), "EI_WR_N": int(not (mwr and not claim))}
 
 
+def m_ecb_bridge_card(v):
+    mrd, mwr, i, o = (not v[k] for k in ("MRD_N", "MWR_N", "IN_N", "OUT_N"))
+    inta, rst = not v["INTAK_N"], not v["SYSRES_N"]
+    return {"MREQ_N": int(not (mrd or mwr)), "IORQ_N": int(not (i or o or inta)), "RD_N": int(not (mrd or i)),
+            "WR_N": int(not (mwr or o)), "M1_N": int(not inta), "RESET_N": int(not rst)}
+
+
+def m_ecb_bridge_claim(v):
+    mrd, inp = not v["MRD_N"], not v["IN_N"]
+    a = {k: v[k] for k in v if k[0] == "A"}
+    win = not a["A15"] and not a["A14"] and a["A13"] and a["A12"] and not a["A11"]
+    eitop = all(a[k] for k in ("A10", "A9", "A8", "A7", "A6", "A5"))
+    memwin = (win and not eitop) or a["A15"]
+    port = (a["A7"] << 5) | (a["A6"] << 4) | (a["A5"] << 3) | (a["A4"] << 2) | (a["A3"] << 1) | a["A2"]
+    ports = port in (0b010000, 0b010100, 0b011100) or (port >> 2) == 0b1100
+    claim = (mrd and memwin) or (inp and ports)
+    return {"DIR": int(not claim), "BUF_OE_N": int(not ((not mrd and not inp) or claim))}
+
+
 def m_ecb_mem_decode(v):
     win = not v["A15"] and not v["A14"] and v["A13"] and v["A12"] and not v["A11"]
     eitop = all(v[k] for k in ("A10", "A9", "A8", "A7", "A6", "A5"))
@@ -217,6 +236,10 @@ DESIGNS = [
                              "A15": 7, "EXTMEM_N": 8},
      {"MREQ_N": 12, "IORQ_N": 13, "RD_N": 14, "WR_N": 15, "M1_N": 16, "RESET_N": 17, "EI_RD_N": 18,
       "EI_WR_N": 19}, m_ecb_bridge),
+    ("ecb_bridge_card", GAL16V8, {"MRD_N": 1, "MWR_N": 2, "IN_N": 3, "OUT_N": 4, "INTAK_N": 5, "SYSRES_N": 6},
+     {"MREQ_N": 12, "IORQ_N": 13, "RD_N": 14, "WR_N": 15, "M1_N": 16, "RESET_N": 17}, m_ecb_bridge_card),
+    ("ecb_bridge_claim", GAL22V10, dict(A_HI, A4=13, A3=14, A2=15, MRD_N=16, IN_N=19),
+     {"DIR": 17, "BUF_OE_N": 18}, m_ecb_bridge_claim),
     ("ecb_mem_decode", GAL22V10, dict(A_HI, FULL_N=13, MREQ_N=14, RD_N=15, WR_N=16), {"DP_CE_N": 23},
      m_ecb_mem_decode),
     ("ecb_io_decode", GAL16V8, {"A7": 1, "A6": 2, "A5": 3, "A4": 4, "A3": 5, "A2": 6, "IORQ_N": 7, "RD_N": 8,

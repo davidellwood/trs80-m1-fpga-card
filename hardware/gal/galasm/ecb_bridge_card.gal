@@ -1,0 +1,15 @@
+GAL16V8
+BRIDGE30
+; Bridge card U3 (ATF16V8B), rev 3.0: Model I strobes -> ECB MREQ*/IORQ*/RD*/WR*/M1*/RESET*.
+MRD_N MWR_N IN_N OUT_N INTAK_N SYSRES_N NC NC NC GND
+NC MREQ_N IORQ_N RD_N WR_N M1_N RESET_N NC NC VCC
+
+/MREQ_N  = /MRD_N + /MWR_N
+/IORQ_N  = /IN_N + /OUT_N + /INTAK_N
+/RD_N    = /MRD_N + /IN_N
+/WR_N    = /MWR_N + /OUT_N
+/M1_N    = /INTAK_N
+/RESET_N = /SYSRES_N
+
+DESCRIPTION
+ECB bridge card for the TRS-80 Model I. Source of truth: ecb_bridge_card.pld.

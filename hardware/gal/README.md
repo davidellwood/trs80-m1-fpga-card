@@ -4,6 +4,8 @@ The `*.pld` files (CUPL) are the design reference. `galasm/*.gal` hold the same 
 
 | JEDEC file | Board / ref | Program into | Mode | Function |
 |---|---|---|---|---|
+| `galasm/ecb_bridge_card.jed` | Bridge card U3 | ATF16V8B (as GAL16V8) | simple | Model I → ECB MREQ*/IORQ*/RD*/WR*/M1*/RESET* (rev 3.0, no EI gating) |
+| `galasm/ecb_bridge_claim.jed` | Bridge card U6 | ATF22V10C (as GAL22V10) | — | Data-buffer direction and enable: claims reads at 3000–37DF, 8000–FFFF and ports 40–43/50–53/70–73/C0–CF (rev 3.1) |
 | `galasm/ecb_bridge.jed` | Backplane U3 | ATF16V8B (as GAL16V8) | simple | Model I → ECB MREQ*/IORQ*/RD*/WR*/M1*/RESET*, EI RD*/WR* gating |
 | `galasm/ecb_mem_decode.jed` | FPGA card U4 | ATF22V10C (as GAL22V10) | — | IDT7132 select, 3000h–37DFh (37FFh with FULL) |
 | `galasm/ecb_io_decode.jed` | FPGA card U5 | ATF16V8B | complex | Ports 50h–53h (70h–73h with ALT), ACT LED |
@@ -26,7 +28,7 @@ powershell -ExecutionPolicy Bypass -File build_jed.ps1
 
 1. **Assemble:** the script assembles every `galasm/*.gal` with GALasm 2.1. That's github.com/daveho/GALasm, built locally into `C:\path\to\tools\galasm`; its licence forbids commercial use.
 2. **Verify:** it then runs `hardware/tools/galsim.py`. That reads each `.jed`, checks the JEDEC fuse checksum, and simulates the GAL16V8 or GAL22V10 fuse array on every input combination. The simulated outputs (0, 1 or tri-state) must match a Python model written from the CUPL source.
-3. **Current result:** all 8 designs match.
+3. **Current result:** all 10 designs match.
 4. **Checking the checker:** a mutation test drops each literal of every live product term, one at a time. The checker caught all but one change; that one is a logically redundant literal in `ecb_xmem_mem`, so its fuse map is equivalent.
 
 **Differences from the CUPL**

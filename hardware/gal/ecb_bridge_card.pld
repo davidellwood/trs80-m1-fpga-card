@@ -1,0 +1,49 @@
+Name     ECB_BRIDGE_CARD ;
+PartNo   U3 ;
+Date     2026-11-15 ;
+Revision 3.0 ;
+Designer TRS-80 FPGA card ;
+Company  ;
+Assembly TRS-80 Model I -> ECB bridge card ;
+Location U3 ;
+Device   g16v8a ;
+
+/* ------------------------------------------------------------------
+ * Bridge card (replaces the rev 2 backplane): rebuilds the Z80-style
+ * ECB control signals from the Model I bus. The Model I gives
+ * qualified strobes only: RD*/WR* (memory), IN*/OUT* (I/O) and
+ * INTAK* (interrupt acknowledge); there is no MREQ*, IORQ* or M1*.
+ * All signals are active low.
+ *
+ *   ECB MREQ* = memory cycle   (RD* or WR* low)
+ *   ECB IORQ* = I/O cycle      (IN* or OUT* or INTAK* low)
+ *   ECB RD*   = any read       (RD* or IN* low)
+ *   ECB WR*   = any write      (WR* or OUT* low)
+ *   ECB M1*   = INTAK*         (so M1* + IORQ* = interrupt acknowledge)
+ *   ECB RESET*= SYSRES*
+ *
+ * No Expansion Interface on this design, so there is no EI RD*/WR*
+ * gating (see ecb_bridge.pld rev 2.1 for the backplane version).
+ * Target ATF16V8B (WinCUPL g16v8a); propagation ~15 ns.
+ * ------------------------------------------------------------------ */
+
+PIN 1  = !MRD ;     /* Model I RD*    */
+PIN 2  = !MWR ;     /* Model I WR*    */
+PIN 3  = !IN ;      /* Model I IN*    */
+PIN 4  = !OUT ;     /* Model I OUT*   */
+PIN 5  = !INTAK ;   /* Model I INTAK* */
+PIN 6  = !SYSRES ;  /* Model I SYSRES* */
+
+PIN 12 = !MREQ ;    /* ECB MREQ* */
+PIN 13 = !IORQ ;    /* ECB IORQ* */
+PIN 14 = !RD ;      /* ECB RD*   */
+PIN 15 = !WR ;      /* ECB WR*   */
+PIN 16 = !M1 ;      /* ECB M1*   */
+PIN 17 = !RESET ;   /* ECB RESET* */
+
+MREQ  = MRD # MWR ;
+IORQ  = IN # OUT # INTAK ;
+RD    = MRD # IN ;
+WR    = MWR # OUT ;
+M1    = INTAK ;
+RESET = SYSRES ;
