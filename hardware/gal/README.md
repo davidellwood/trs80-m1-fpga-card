@@ -26,7 +26,7 @@ The `*.pld` files (CUPL) are the design reference. `galasm/*.gal` hold the same 
 powershell -ExecutionPolicy Bypass -File build_jed.ps1
 ```
 
-1. **Assemble:** the script assembles every `galasm/*.gal` with GALasm 2.1. That's github.com/daveho/GALasm, built locally into `C:\path\to\tools\galasm`; its licence forbids commercial use.
+1. **Assemble:** the script assembles every `galasm/*.gal` with GALasm 2.1. That's github.com/daveho/GALasm; build it from source (on Windows with MSVC, add `/DReadFile=galasm_ReadFile` to avoid a clash with the Windows API). Its licence forbids commercial use. The script finds `galasm.exe` from, in order: `-Galasm <path>`, the `GALASM` environment variable, `tools\galasm\bin\galasm.exe` next to the repository, or the PATH.
 2. **Verify:** it then runs `hardware/tools/galsim.py`. That reads each `.jed`, checks the JEDEC fuse checksum, and simulates the GAL16V8 or GAL22V10 fuse array on every input combination. The simulated outputs (0, 1 or tri-state) must match a Python model written from the CUPL source.
 3. **Current result:** all 10 designs match.
 4. **Checking the checker:** a mutation test drops each literal of every live product term, one at a time. The checker caught all but one change; that one is a logically redundant literal in `ecb_xmem_mem`, so its fuse map is equivalent.

@@ -40,7 +40,7 @@ On this PC, run:
 powershell -ExecutionPolicy Bypass -File build.ps1
 ```
 
-It uses the portable toolchain in `C:\path\to\tools\pico`: Arm GNU Toolchain 15.3.rel2, CMake 4.4.2, Ninja 1.13.2, Pico SDK 2.3.1 with its pinned TinyUSB, and picotool 2.3.1. Nothing is installed system-wide. The output is `build/frehd_pico.uf2`, about 64 KB of flash and 25 KB of RAM. To load it, hold BOOTSEL while plugging the Pico into USB, then copy the `.uf2` onto the drive that appears.
+It uses a portable toolchain folder: Arm GNU Toolchain 15.3.rel2 in `armgcc`, CMake 4.4.2 in `cmake`, Ninja 1.13.2 in `ninja`, Pico SDK 2.3.1 with its pinned TinyUSB in `pico-sdk`, and picotool 2.3.1 in `picotool`. Nothing is installed system-wide. The script looks for that folder in this order: `-Tools <folder>`, the `PICO_TOOLS` environment variable, then `tools\pico` next to the repository (`..\tools\pico` from the repository root). The output is `build/frehd_pico.uf2`, about 64 KB of flash and 25 KB of RAM. To load it, hold BOOTSEL while plugging the Pico into USB, then copy the `.uf2` onto the drive that appears.
 
 - **FatFs:** ChaN's FatFs R0.15 is included in `lib/fatfs` under its own permissive licence. CMake copies `src/ffconf.h` over its default configuration.
 - **Warnings:** the project's own sources build with `-Wall -Wextra` and give no warnings.

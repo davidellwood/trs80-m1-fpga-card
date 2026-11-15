@@ -1,10 +1,19 @@
-# Build the Pico firmware with the portable toolchain in C:\path\to\tools\pico
-# (Arm GNU 15.3.rel2, CMake 4.4.2, Ninja 1.13.2, Pico SDK 2.3.1 + TinyUSB, picotool 2.3.1).
+# Build the Pico firmware with a portable toolchain folder holding:
+#   cmake\<cmake-x.y.z-windows-x86_64>\bin, ninja\ninja.exe, armgcc\bin (Arm GNU Toolchain),
+#   pico-sdk\ (with lib\tinyusb), picotool\picotool\ (picotoolConfig.cmake)
 #   powershell -ExecutionPolicy Bypass -File build.ps1 [-Tools <folder>] [-Clean]
+# The toolchain folder is, in order: -Tools, the PICO_TOOLS environment variable, or
+# tools\pico in the folder that contains this repository (i.e. ..\tools\pico from the repo root).
 # Output: build\frehd_pico.uf2 (hold BOOTSEL, plug in the Pico, copy the .uf2 onto it).
-param([string]$Tools = "C:\path\to\tools\pico", [switch]$Clean)
+param([string]$Tools = "", [switch]$Clean)
 $ErrorActionPreference = "Stop"
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repo = (Resolve-Path (Join-Path $here "..\..")).Path
+if (-not $Tools) { $Tools = $env:PICO_TOOLS }
+if (-not $Tools) { $Tools = Join-Path (Split-Path -Parent $repo) "tools\pico" }
+if (-not (Test-Path (Join-Path $Tools "pico-sdk\pico_sdk_init.cmake"))) {
+    throw "Pico toolchain not found in '$Tools'. Pass -Tools <folder> or set PICO_TOOLS (see README.md)."
+}
 $cmakeDir = (Get-ChildItem (Join-Path $Tools "cmake") -Directory | Select-Object -First 1).FullName
 $env:PATH = "$cmakeDir\bin;$Tools\ninja;$Tools\armgcc\bin;$env:PATH"
 $env:PICO_SDK_PATH = Join-Path $Tools "pico-sdk"
