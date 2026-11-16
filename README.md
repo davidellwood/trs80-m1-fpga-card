@@ -33,6 +33,7 @@ All are routed, and DRC is clean against their schematics. None has been built y
 | Path | Contents |
 |---|---|
 | `docs/rev2-architecture.md` | Rev 2 design: ECB pinout, bridge, each card as built, checks before ordering |
+| `docs/bridge-card-timing.md` | How the bridge rebuilds the ECB signals the Model I bus lacks (MREQ*, IORQ*, M1*…), with timing diagrams |
 | `docs/hardware-design.md` | Rev 0.1 card: memory and I/O maps, Tang Nano 9K pinout, BOM |
 | `docs/sprite-engine.md`, `docs/am9511.md` | Sprite engine port protocol; Am9511 core programming model and accuracy |
 | `hardware/gal/` | CUPL sources for all GALs: rev 0.1 decoders, `ecb_bridge` (backplane), `ecb_mem_decode`/`ecb_io_decode` (FPGA card), `ecb_sd_decode` (SD card), `ecb_xmem_io`/`ecb_xmem_mem` (banked memory). Compiled JEDEC files, verified by fuse-level simulation, are in `galasm/`; see [hardware/gal/README.md](hardware/gal/README.md) |

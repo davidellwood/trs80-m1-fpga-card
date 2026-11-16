@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="278" viewBox="0 0 880 278" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#555"/></marker></defs>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="14" y="24" font-size="16" font-weight="600" fill="#111">Reset (Model I SYSRES* -&gt; ECB RESET*), and the cable unplugged</text>
+<rect x="250.0" y="46" width="300.0" height="20" fill="#f4f6f8" stroke="#c8ccd0"/>
+<text x="400.0" y="60" font-size="12" text-anchor="middle" fill="#333">power-up / reset</text>
+<rect x="550.0" y="46" width="150.0" height="20" fill="#f4f6f8" stroke="#c8ccd0"/>
+<text x="625.0" y="60" font-size="12" text-anchor="middle" fill="#333">running</text>
+<rect x="700.0" y="46" width="150.0" height="20" fill="#f4f6f8" stroke="#c8ccd0"/>
+<text x="775.0" y="60" font-size="12" text-anchor="middle" fill="#333">cable unplugged</text>
+<rect x="0" y="72" width="6" height="30" fill="#1f5fa8"/>
+<rect x="0" y="72" width="6" height="30" fill="#1f5fa8"/>
+<text x="14" y="91" font-size="12.5" fill="#1f5fa8">SYSRES*  (Model I)</text>
+<rect x="250" y="72" width="610" height="30" fill="#fafbfc"/>
+<line x1="250.0" y1="95.0" x2="490.0" y2="95.0" stroke="#1f5fa8" stroke-width="2"/>
+<line x1="490.0" y1="77.0" x2="490.0" y2="95.0" stroke="#1f5fa8" stroke-width="2"/>
+<line x1="490.0" y1="77.0" x2="700.0" y2="77.0" stroke="#1f5fa8" stroke-width="2"/>
+<line x1="700.0" y1="77.0" x2="703.0" y2="87.0" stroke="#1f5fa8" stroke-width="2"/>
+<line x1="700.0" y1="87.0" x2="850.0" y2="87.0" stroke="#1f5fa8" stroke-width="1.5" stroke-dasharray="4 3"/>
+<rect x="0" y="102" width="6" height="30" fill="#8a4fbf"/>
+<rect x="0" y="102" width="6" height="30" fill="#8a4fbf"/>
+<text x="14" y="121" font-size="12.5" fill="#8a4fbf">SYSRES* at U3 (R4 10k pull-down)</text>
+<line x1="250.0" y1="125.0" x2="500.5" y2="125.0" stroke="#8a4fbf" stroke-width="2"/>
+<line x1="500.5" y1="107.0" x2="500.5" y2="125.0" stroke="#8a4fbf" stroke-width="2"/>
+<line x1="500.5" y1="107.0" x2="700.0" y2="107.0" stroke="#8a4fbf" stroke-width="2"/>
+<line x1="700.0" y1="107.0" x2="700.0" y2="125.0" stroke="#8a4fbf" stroke-width="2"/>
+<line x1="700.0" y1="125.0" x2="850.0" y2="125.0" stroke="#8a4fbf" stroke-width="2"/>
+<rect x="0" y="132" width="6" height="30" fill="#c0392b"/>
+<rect x="0" y="132" width="6" height="30" fill="#c0392b"/>
+<text x="14" y="151" font-size="12.5" fill="#c0392b">RESET*  = SYSRES*  (GAL)</text>
+<rect x="250" y="132" width="610" height="30" fill="#fafbfc"/>
+<line x1="250.0" y1="155.0" x2="511.0" y2="155.0" stroke="#c0392b" stroke-width="2"/>
+<line x1="511.0" y1="137.0" x2="511.0" y2="155.0" stroke="#c0392b" stroke-width="2"/>
+<line x1="511.0" y1="137.0" x2="710.5" y2="137.0" stroke="#c0392b" stroke-width="2"/>
+<line x1="710.5" y1="137.0" x2="710.5" y2="155.0" stroke="#c0392b" stroke-width="2"/>
+<line x1="710.5" y1="155.0" x2="850.0" y2="155.0" stroke="#c0392b" stroke-width="2"/>
+<rect x="0" y="162" width="6" height="30" fill="#8a4fbf"/>
+<rect x="0" y="162" width="6" height="30" fill="#8a4fbf"/>
+<text x="14" y="181" font-size="12.5" fill="#8a4fbf">Strobes at U5 (LS244 inputs)</text>
+<polygon points="250.0,177.0 255.0,167.0 695.0,167.0 700.0,177.0 695.0,185.0 255.0,185.0" fill="#ffffff" stroke="#8a4fbf" stroke-width="1.5"/>
+<text x="475.0" y="181.0" font-size="11" text-anchor="middle" fill="#222">follow the Model I</text>
+<polygon points="700.0,177.0 705.0,167.0 845.0,167.0 850.0,177.0 845.0,185.0 705.0,185.0" fill="#ffffff" stroke="#8a4fbf" stroke-width="1.5"/>
+<text x="775.0" y="181.0" font-size="11" text-anchor="middle" fill="#222">float high = idle</text>
+<rect x="14" y="213" width="10" height="10" fill="#1f5fa8"/>
+<text x="28" y="222" font-size="11" fill="#333">Model I expansion bus</text>
+<rect x="193" y="213" width="10" height="10" fill="#8a4fbf"/>
+<text x="207" y="222" font-size="11" fill="#333">Bridge card</text>
+<rect x="302" y="213" width="10" height="10" fill="#c0392b"/>
+<text x="316" y="222" font-size="11" fill="#333">ECB bus</text>
+<text x="14" y="240" font-size="11" fill="#444">With the ribbon unplugged, R4 holds RESET* low, so every ECB card stays in reset, and the LS244's open inputs</text>
+<text x="14" y="256" font-size="11" fill="#444">read high, so no strobe is active. A connected Model I drives SYSRES* and overrides R4.</text>
+</svg>
